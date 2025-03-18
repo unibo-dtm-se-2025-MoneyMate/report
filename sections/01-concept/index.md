@@ -13,4 +13,10 @@ Here you should explain:
     - Library
     - Web-service(s)
     - Data processing toolkit (= Library + CLI, or Jupyter Notebook)
+
 - Use case collection
+    - Where are the users?
+    - When and how frequently do they interact with the system?
+    - How do they interact with the system? Which devices are they using?
+    - Does the system need to store user's data? Which data? Where?
+    - Most likely, there will be multiple roles.
