@@ -139,8 +139,8 @@ Follow instructions from here: <https://jekyllrb.com/docs/installation/>
 
 [template-repo]: https://github.com/unibo-dtm-se/template-project-work
 [template-site]: https://unibo-dtm-se.github.io/template-project-work
-[course-site]: https://www.unibo.it/en/study/phd-professional-masters-specialisation-schools-and-other-programmes/course-unit-catalogue/course-unit/2023/466765
-[general-forum]: https://virtuale.unibo.it/mod/forum/view.php?id=1512135
-[project-forum]: https://virtuale.unibo.it/mod/forum/view.php?id=1544423
+[course-site]: https://www.unibo.it/en/study/phd-professional-masters-specialisation-schools-and-other-programmes/course-unit-catalogue/course-unit/2024/466765
+[general-forum]: https://virtuale.unibo.it/mod/forum/view.php?id=1885625
+[project-forum]: https://virtuale.unibo.it/mod/forum/view.php?id=1885626
 [markdown-cheatsheet]: https://www.markdownguide.org/cheat-sheet
 [jeckyll-home]: https://jekyllrb.com/
