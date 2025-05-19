@@ -11,4 +11,4 @@ This section should describe:
 - What does not work as it should
 - Potential future developments to improve/expand the software
 
-N.B. Be honest, no inpact on the final mark.
+N.B. Be honest, no impact on the final mark.
