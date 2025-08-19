@@ -1,5 +1,5 @@
-title: Project work template
-description: A starter template for Software Engineering project work!
+title: Money Mate
+description: a desktop application that helps users manage expenses, track credits and debts with contacts, and visualize financial data. With a simple and intuitive interface, users can record transactions, organize contacts, and view spending trends through interactive charts. The project combines robust data management, clear user interaction, and insightful analytics to make personal budgeting easy for everyone.
 remote_theme: pmarsceill/just-the-docs
 color_scheme: "light"
 search_enabled: true
