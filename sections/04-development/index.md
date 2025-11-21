@@ -33,6 +33,8 @@ Our branch flow is **main → developer → feature/fix branches**:
   - These branches are merged back into `developer` via pull requests.
 
 
+   ![MoneyMate Git workflow](../../pictures/github_workflow.png)
+
 ### Commit message conventions
 
 The repository uses a **conventional‑commit‑style** pattern for commit messages:
