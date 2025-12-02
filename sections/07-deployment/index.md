@@ -84,3 +84,17 @@ This section explains what operations are needed to make the software work on th
     ```
 
     The path is set programmatically through the `set_db_path` API in the data layer. No manual creation of the file is required; it is created automatically.
+    
+    - **Optional: populate the database with demo data**
+
+    Developers or testers who want a pre-populated database can use the provided script:
+
+    ```bash
+    python populate_db.py
+    ```
+
+    This script:
+
+    - Removes the existing `MoneyMate/data/moneymate_gui.db` file if present.
+    - Recreates the database using the data layer API.
+    - Adds sample users, categories, expenses, contacts, and transactions.
