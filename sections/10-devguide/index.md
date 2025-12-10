@@ -26,8 +26,13 @@ This section explains how a new person can join the development of the `unibo-dt
 
 ### 2.1 Branches
 
-- Default branch: `main`.
-- Create topic branches instead of committing directly to `main`:
+- **Release branch**: `main`  
+  Contains only stable code, already tested.
+
+- **Integration branch**: `developer`  
+  All new functionality, bugfix and chore are integrated here berfore any pull request to the 'main'.
+
+- **Topic branches** (created from `developer`, not `main`):
   - `feature/<short-description>`
   - `fix/<short-description>`
   - `chore/<short-description>`
@@ -37,7 +42,7 @@ This section explains how a new person can join the development of the `unibo-dt
 - Use **Conventional Commits** (enables automated versioning and changelog):
 
   ```text
-  type(scope)?: short description
+  type(scope): short description
   ```
 
   Examples:
