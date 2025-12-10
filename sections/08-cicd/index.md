@@ -5,7 +5,7 @@ nav_order: 9
 ---
 
 # CI/CD
-This section describes the continuous integration and continuous deployment (CI/CD) workflow of the PROtect project. 
+This section describes the continuous integration and continuous deployment (CI/CD) workflow of the MoneyMate project. 
 
 ### What is automated and why?
 
@@ -34,9 +34,9 @@ The project leverages GitHub Actions to automate both testing and releases. The 
    - The use of `semantic-release` ensures that version bumps strictly follow SemVer rules based on the actual content of commits, avoiding arbitrary or inconsistent manual versioning by developers.
 
 ### How the workflow is implemented?
-The CI/CD pipeline for the `@unibo-dtm-se-2025-MoneyMate/artifact` repository is implemented using GitHub Actions workflows stored under `.github/workflows/`. In this repository:
+The CI/CD pipeline for the `unibo-dtm-se-2025-MoneyMate/artifact` repository is implemented using GitHub Actions workflows stored under `.github/workflows/`. In this repository:
 
 - Continuous Integration (CI) workflows are triggered on events such as `push` and `pull_request` to relevant branches.  
 - These CI workflows install the appropriate Python environment and project dependencies, then run the project’s automated tests to validate code correctness and compatibility.
-- A dedicated deployment/release workflow is triggered only after CI has completed successfully and only from the Master branch (intended for release).
-- The release workflow is responsible for building the project’s artifact(s) and publishing them to Pipy
+- A dedicated deployment/release workflow is triggered only after CI has completed successfully and only from the Main branch (intended for release).
+- The release workflow is responsible for building the project’s artifact(s) and publishing them to PyPI
