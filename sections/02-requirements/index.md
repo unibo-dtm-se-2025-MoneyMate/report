@@ -78,7 +78,7 @@ The NON-FUNCTIONAL REQUIREMENTS touch:
 
 ID | Requirement | Acceptance Criteria
 ---|------------|--------------------
-NF1 | The application must run locally on a standard desktop environment (Windows, macOS, Linux) with Python. | Checked when, after installing dependencies, a user can run `python -m MoneyMate` and use all core features without requiring a network connection.
+NF1 | The application must run locally on a standard desktop environment (Windows) with Python. | Checked when, after installing dependencies, a user can run `python -m MoneyMate` and use all core features without requiring a network connection.
 NF2 | The GUI must be usable by non-technical users through mouse and keyboard. | Checked when typical users can complete flows like “login → add expense → add contact → add transaction → view charts” using only GUI controls (no CLI).
 NF3 | The system must provide clear feedback for errors and successful operations. | Checked when operations such as failed login, invalid input or backend errors trigger message boxes with understandable messages, and successful actions provide visible confirmation.
 NF4 | The system must keep response times acceptable for typical personal datasets. | Checked when, with realistic amounts of data (e.g., thousands of expenses and hundreds of contacts/transactions), loading screens and refreshing tables complete in a few seconds on a standard student laptop.
