@@ -133,10 +133,7 @@ Interaction is purely **graphical**, via the Tkinter desktop GUI:
   - select rows in tables (Treeview) to edit or delete specific items,
   - navigate between screens using a sidebar of buttons (Dashboard, Expenses, Categories, Transactions, Contacts).
 
-- The GUI runs on a **desktop or laptop computer**, typically:
-  - Windows,
-  - macOS,
-  - Linux (with Tk/Tcl support and Python 3.9+ installed).
+- The GUI runs on a **desktop or laptop computer**
 
 There is no web-based or mobile client in the current project: all interactions happen in the **local Tkinter window**.
 
