@@ -70,9 +70,8 @@ F8 | The system must allow users to create, view and delete contacts. | Checked 
 F9 | The system must allow users to record transactions representing credits and debts with contacts. | Checked when creating a transaction with a contact and amount adds a row to the transactions list and the transaction is stored via the data layer API.
 F10 | The system must allow users to view and manage their transactions. | Checked when the Transactions screen loads all transactions for the logged-in user, and deleting/closing a transaction updates the list and related balances.
 F11 | The system must compute and show the user’s net balance and per-contact breakdown. | Checked when summary views (Transactions/Charts) display a net balance and per-contact amounts consistent with stored transactions.
-F12 | The system must provide a dashboard with charts for expenses and balances. | Checked when the Charts screen displays charts (e.g., expenses by category, expenses over time, balance summaries) built using matplotlib and refreshed from the data layer.
 F13 | The system must validate required input fields in GUI forms before saving. | Checked when attempts to save expenses, contacts, categories or transactions with missing/invalid required fields are rejected and a clear error message is shown.
-F14 | The system must restrict access so that each user can only access their own data. | Checked when tests and manual checks confirm that expenses, contacts, categories and transactions created under one user account are not visible or modifiable from another account.
+F12 | The system must restrict access so that each user can only access their own data. | Checked when tests and manual checks confirm that expenses, contacts, categories and transactions created under one user account are not visible or modifiable from another account.
 
 The NON-FUNCTIONAL REQUIREMENTS touch:
 
@@ -84,7 +83,6 @@ NF3 | The system must provide clear feedback for errors and successful operation
 NF4 | The system must keep response times acceptable for typical personal datasets. | Checked when, with realistic amounts of data (e.g., thousands of expenses and hundreds of contacts/transactions), loading screens and refreshing tables complete in a few seconds on a standard student laptop.
 NF5 | The data layer must preserve consistency and integrity of stored information. | Checked when automated tests in `test/data_layer` and `test/system` concerning integrity, ownership, listing order and analytics all pass successfully.
 NF6 | The system must avoid crashes on invalid operations, handling errors gracefully. | Checked when exceptional situations (e.g., failing DB operations, missing GUI backend) are handled by showing errors or skipping tests, and the application or test suite does not crash irrecoverably.
-NF7 | The system must log key events (especially authentication-related) to support auditing and debugging. | Checked when login/logout and other relevant events produce audit/log entries as described in the README, verifiable via tests or inspection of log data.
 
 The IMPLEMENTATION REQUIREMENTS, which are more technical stuff, are about:
 
@@ -92,14 +90,9 @@ ID | Requirement | Acceptance Criteria
 ---|------------|--------------------
 I1 | The system must use an SQLite database to store users, expenses, contacts, categories, transactions and audit data. | Checked when the application creates and uses an SQLite file (including `moneymate_gui.db` for the GUI) where these entities are stored in structured tables.
 I2 | The data layer must expose a Python API for all core operations (CRUD and analytics). | Checked when GUI modules interact only with the data layer via functions such as `api_add_expense`, `api_get_expenses`, `api_add_contact`, `api_get_user_balance_breakdown`, and all GUI tests patch these APIs.
-I3 | The system must be developed primarily in Python. | Checked when the repository language statistics show Python as the main language and all core modules (`MoneyMate/data_layer`, `MoneyMate/gui`) are implemented in Python.
-I4 | The GUI must be implemented using Tkinter and ttk. | Checked when GUI modules import `tkinter` and `ttk`, and the main window is implemented by the `MoneyMateGUI` class inheriting from `tk.Tk`.
-I5 | The system must use matplotlib to render charts inside the Tkinter GUI. | Checked when the `ChartsFrame` embeds matplotlib figures using the TkAgg backend and these figures are visible in the running application.
-I6 | The project must include automated tests for the data layer, GUI, and system behavior. | Checked when tests under `test/data_layer`, `test/gui`, and `test/system` can be executed with `pytest` and are integrated in the CI workflows defined in `.github/workflows`.
-I7 | The codebase must follow the modular structure defined in the template (separated packages and tests). | Checked when the repository contains the documented structure: `MoneyMate/data_layer`, `MoneyMate/gui`, and `test/` with subfolders for `data_layer`, `gui`, and `system`, consistent with the README.
-I8 | The GUI must configure its own local SQLite database file at startup. | Checked when `MoneyMate/gui/app.py` computes a path like `MoneyMate/data/moneymate_gui.db`, ensures the directory exists, calls `set_db_path` with that path, and the file is created on first launch.
-I9 | GUI tests must avoid side effects on the real GUI database file. | Checked when `test/gui/conftest.py` patches `set_db_path` before importing the GUI, so tests run without creating or modifying the actual `moneymate_gui.db`.
-I10 | The project must be configurable and buildable using the provided packaging files. | Checked when `pyproject.toml`, `requirements.txt` and CI configuration allow installation/build and automated tests execution according to the course guidelines.
+I3 | The GUI must be implemented using Tkinter and ttk. | Checked when GUI modules import `tkinter` and `ttk`, and the main window is implemented by the `MoneyMateGUI` class inheriting from `tk.Tk`.
+I4 | The project must include automated tests for the data layer, GUI, and system behavior. | Checked when tests under `test/data_layer`, `test/gui`, and `test/system` can be executed with `pytest` and are integrated in the CI workflows defined in `.github/workflows`
+
 
 ---
 ![MoneyMate use case diagram](../../pictures/usercase.png)
