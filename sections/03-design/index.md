@@ -60,6 +60,8 @@ Discovery / naming
 + No service discovery is needed (in-process calls).
 + Components are discovered through Python imports; the database is “discovered” through its configured path.
 
+![Architecture](../../pictures/Infrastructure.png)
+
 ## Modelling
 
 ### Domain driven design (DDD) modelling
@@ -87,6 +89,8 @@ Repositories / services
 Domain events
 - Auth-related events are persisted via access_logs (login, logout, failed_login, password_change, password_reset).
 
+![Architecture](../../pictures/Object-oriented-modelling.png)
+
 ### Object-oriented modelling
 Main classes (implementation-level):
 - DatabaseManager
@@ -101,6 +105,7 @@ Main persisted “entities” (DB tables):
 + users, contacts, categories, expenses, transactions,
 + plus cross-cutting notes, attachments, access_logs, schema_version.
 
+![Component diagram](../../pictures/Interaction.png)
 
 ## Interaction
 How components communicate
@@ -108,6 +113,8 @@ Communication is synchronous in-process function calls:
 - GUI/scripts call MoneyMate.data_layer.api functions.
 - The API façade calls managers through a shared DatabaseManager.
 - Managers communicate with SQLite through database.get_connection().
+
+![Architecture](../../pictures/Sequence_diagram.png)
 
 ## Behaviour
 
@@ -136,6 +143,7 @@ State updates
 - All persistent state updates occur via manager methods that execute SQL statements on SQLite.
 - The schema is created/updated by database.init_db().
 
+![Architecture](../../pictures/Activity_diagram.png)
 
 ## Data-related aspects
 What data is stored, where, and why
