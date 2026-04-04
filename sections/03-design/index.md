@@ -5,95 +5,167 @@ nav_order: 4
 ---
 
 # Design
-
-This chapter explains the strategies used to meet the requirements identified in the analysis. 
-
-Ideally, the design should be the same, regardless of the technological choices made during the implementation phase.
-
-> You can re-order the sections as you prefer, but all the sections must be present in the end
+This chapter explains the strategies used to meet the requirements identified in the analysis. The overall design is intentionally technology-agnostic at the architectural level (separation of concerns, stable interfaces), while the implementation uses Python and SQLite.
 
 ## Architecture 
+MoneyMate adopts a layered, object-based architecture centered on a data-layer API façade. The main goal is to keep the UI and scripts independent from persistence details and from low-level SQL.
 
-- Which architectural style (e.g. layered, object-based, event-based, shared dataspace)? Why? Why not the others?
-- Provide details about the actual architecture (e.g. N-tier, hexagonal, etc.) you are going to adopt. Motivate your choice.
-- Provide a high-level overview of the architecture, possibly with a diagram
-- Describe the responsibilities of each architectural component
+Why layered/object-based?
+- The domain is CRUD-heavy (users, contacts, categories, expenses, transactions) and benefits from a clear separation of responsibilities.
+- It enables testability and maintainability: the UI can call stable API functions without embedding SQL or DB-specific logic.
+- It keeps the persistence technology (SQLite) behind a stable boundary (database utilities + managers).
 
-> UML Components diagrams are welcome here
+Why not event-based / microservices?
++ The system is fundamentally a single-user / single-process application with a local database.
++ Introducing brokers, queues, or multiple services would add complexity without a clear benefit for the target scope.
+
+
+Adopted structure (N-tier / façade-based)
+From the code, the architecture can be described as a 3/4-layer system:
+
+1. Presentation / Entrypoint layer
+- GUI entrypoint: python -m MoneyMate (via MoneyMate/__main__.py), which delegates to MoneyMate.gui.app.run_gui.
+- Scripts entrypoints: e.g., populate_db.py and scripts/init_db.py.
+
+2. Application layer (API Façade)
+- MoneyMate.data_layer.api exposes dict-based functions (api_*) that return a standard envelope: {"success": bool, "error": str|None, "data": any}.
+- It maintains a singleton DatabaseManager and provides set_db_path() for switching database paths (useful for GUI/test environments).
+
+3. Domain/Application services (Managers / Orchestrator)
+- MoneyMate.data_layer.manager.DatabaseManager coordinates sub-managers: UserManager, ContactsManager, CategoriesManager, ExpensesManager, TransactionsManager.
+- It also provides backward-compatible “legacy-style” methods (e.g., add_expense, add_transaction) with validation and response normalization.
+
+4. Infrastructure / Persistence layer
+- MoneyMate.data_layer.database is the central module for:
+    + SQLite connection configuration (foreign keys ON, Row factory),
+    + schema initialization (tables + indexes + constraints),
+    + schema versioning and non-destructive migration scaffolding,
+    + utility functions such as list_tables() and get_schema_version().
+
 
 ## Infrastructure (mostly applies to distributed systems)
+MoneyMate is not a distributed system: it is designed to run as a single process on a user machine (or in CI).
 
-- Are there **infrastructural components** that need to be introduced? Which and **how many** of each?
-    - e.g. **clients**, **servers**, **load balancers**, **caches**, **databases**, **message brokers**, **queues**, **workers**, **proxies**, **firewalls**, **CDNs**, etc.
-- How do components **distribute** over the network? **Where** are they located?
-    - e.g. do servers / brokers / databases / etc. sit on the same machine? on the same network? on the same datacenter? on the same continent?
-- How do components **find** each other?
-    - How to **name** components?
-    - e.g. **DNS**, **service discovery**, **load balancing**, etc.
+Infrastructural components
+- Client process: Python application (GUI or scripts).
+- Database: SQLite file (local, on disk). The DB path can be configured (via API set_db_path and/or environment variables used in scripts).
+- No external components (message brokers, caches, load balancers, separate servers) are required by design.
 
-> UML deployment diagrams are welcome here
+istribution / location
++ All components run on the same host.
++ In CI, they run on GitHub-hosted runners across OS/Python matrices (from your workflows).
+
+Discovery / naming
++ No service discovery is needed (in-process calls).
++ Components are discovered through Python imports; the database is “discovered” through its configured path.
 
 ## Modelling
 
 ### Domain driven design (DDD) modelling
+A reasonable conceptual decomposition into bounded contexts is:
+1) Identity & Access
+    - Concepts: User, Role, Authentication, AccessLog.
+    - Persistence: users, access_logs tables.
+    - Key invariants:
+        + unique username,
+        + role is constrained (user/admin),
+        + access logs are best-effort and should not break auth flows.
 
-- Which are the bounded contexts of your domain? 
-- Which are domain concepts (entities, value objects, aggregates, etc.) for each context?
-- Are there repositories, services, or factories for each/any domain concept?
-- What are the relavant domain events in each context?
+2) Personal Finance Tracking
+    - Concepts: Contact, Category, Expense, Transaction, Balance.
+    - Persistence: contacts, categories, expenses, transactions tables.
+    - Key invariants:
+        + contacts/categories are scoped by owner user (user_id),
+        + expenses belong to a user,
+        + transactions have from_user_id != to_user_id, type ∈ {credit,debit}, amount > 0.
 
-> Context map diagrams are welcome here
+Repositories / services
+- Managers behave as repositories/application services for each entity, encapsulating persistence and rules.
+- The api.py module works as an application façade.
+
+Domain events
+- Auth-related events are persisted via access_logs (login, logout, failed_login, password_change, password_reset).
 
 ### Object-oriented modelling
+Main classes (implementation-level):
+- DatabaseManager
+- UserManager
+- ContactsManager
+- CategoriesManager
+- ExpensesManager
+- TransactionsManager
 
-- What are the main data types (e.g. classes) of the system?
-- What are the main attributes and methods of each data type?
-- How do data types relate to each other?
+All of them implement operations returning a shared envelope: {success, error, data}.
+Main persisted “entities” (DB tables):
++ users, contacts, categories, expenses, transactions,
++ plus cross-cutting notes, attachments, access_logs, schema_version.
 
-> UML class diagrams are welcome here
-
-### In case of a distributed system
-
-- How do the domain concepts map to the architectural or infrastuctural components?
-    + i.e. which architectural/component is responsible for which domain concept?
-    + are there data types which are required onto multiple components? (e.g. messages being exchanged between components)
-
-- What are the domain concepts or data types which represent the state of the distributed system?
-    + e.g. state of a video game on central server, while inputs/representations on clients
-    + e.g. where to store messages in an instant-messaging app? for how long?
-
-- Are there domain concepts or data types which represent messages being exchanged between components?
-    + e.g. messages between clients and servers, messages between servers, messages between clients
 
 ## Interaction
-
-- How do components *communicate*? *When*? *What*?
-
-- Which **interaction patterns** do they enact?
-
-> UML sequence diagrams are welcome here
+How components communicate
+Communication is synchronous in-process function calls:
+- GUI/scripts call MoneyMate.data_layer.api functions.
+- The API façade calls managers through a shared DatabaseManager.
+- Managers communicate with SQLite through database.get_connection().
 
 ## Behaviour
 
 - How does **each** component *behave* individually (e.g., in *response* to *events* or messages)?
     + Some components may be *stateful*, others *stateless*
 
-- Which components are in charge of updating the **state** of the system? *When*? *How*?
+Interaction patterns
++ Facade pattern: api.py provides simple, stable entrypoints.
++ Repository/Manager pattern: each manager encapsulates SQL and domain validation.
++ Singleton: the façade keeps one DatabaseManager instance, protected by a lock.
 
-> UML state diagrams or activity diagrams are welcome here
+Typical interaction: “Add Transaction”
+1. UI calls api_add_transaction(...).
+2. api.py calls get_db().transactions.add_transaction(...).
+3. TransactionsManager validates and persists the transaction into SQLite.
+4. UI receives the envelope {success, error, data}.
 
-## Data-related aspects (in case persistent storage is needed)
 
-- Is there any data that needs to be stored?
-    - *What* data? *Where*? *Why*?
+Behaviour
+Component behaviour (stateful vs stateless)
++ API façade is stateful only in terms of holding the singleton DatabaseManager.
++ Managers are mostly stateless business components that open connections on demand (DB path stored in the instance).
++ SQLite database is the persistent state of the system.
 
-- How should **persistent data** be **stored**? Why?
-    - e.g., relations, documents, key-value, graph, etc.
+State updates
+- All persistent state updates occur via manager methods that execute SQL statements on SQLite.
+- The schema is created/updated by database.init_db().
 
-- Which components perform queries on the database?
-    - *When*? *Which* queries? *Why*?
-    - Concurrent read? Concurrent write? Why?
 
-- Is there any data that needs to be shared between components?
-    - *Why*? *What* data?
+## Data-related aspects
+What data is stored, where, and why
+MoneyMate stores all application data in a local SQLite database to ensure:
++ persistence across runs,
++ ACID transactions for basic consistency,
++ portable and simple deployment (single file).
 
+Stored data includes:
+- authentication and roles (users, access_logs),
+- user-scoped entities (contacts, categories, expenses),
+- peer-to-peer tracking (transactions),
+- optional metadata (notes, attachments),
+- schema versioning (schema_version).
+
+Storage model
+The persistence model is relational (SQLite). It is appropriate because:
++ relationships (user → contacts/categories/expenses) are naturally relational,
++ constraints and indexes can enforce integrity and performance.
+
+
+Who queries the DB and when
+All DB queries are performed by the entity managers.
+Common query patterns:
+- listing with deterministic ordering,
+- filtering by date range,
+- pagination with limit/offset,
+- per-user scoping through user_id,
+- balance aggregations via SQL SUM/CASE in TransactionsManager.
+
+Concurrency considerations
++ The design assumes a single application process; SQLite is suitable for this scenario.
++ Foreign keys are enabled (PRAGMA foreign_keys = ON).
++ The façade uses a lock only for singleton initialization and DB switching (_db_lock).
