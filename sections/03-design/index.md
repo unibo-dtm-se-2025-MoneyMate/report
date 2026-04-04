@@ -42,7 +42,7 @@ From the code, the architecture can be described as a 3/4-layer system:
     + schema versioning and non-destructive migration scaffolding,
     + utility functions such as list_tables() and get_schema_version().
 
-![Architecture](pictures/Architecture.png)
+![Architecture](../../pictures/Architecture.png)
 
 ## Infrastructure (mostly applies to distributed systems)
 MoneyMate is not a distributed system: it is designed to run as a single process on a user machine (or in CI).
