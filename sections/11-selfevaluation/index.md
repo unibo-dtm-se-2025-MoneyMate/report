@@ -80,4 +80,27 @@ In short, I contributed to the project mainly by strengthening the backend found
 
 ## Cristian Romeo
 
-_TODO: Add Cristian Romeo's self-evaluation section._
+### Self-evaluation Narrative
+
+During the MoneyMate project, my initial contributions were heavily focused on the user-facing aspects of the application. I was responsible for the design development, ensuring the desktop app was intuitive and simple for the end-user. This involved crafting the user interface, refining user interactions, and integrating Python libraries to generate clear, informative financial graphs. My primary goal was to ensure the application was not only functional but visually engaging and easy to navigate.
+
+As the project advanced, my responsibilities naturally shifted toward the structural core of the application. Because I was tasked with connecting the visual design to the underlying logical part, I found myself acting as the bridge between the frontend and backend. This unique position required me to understand and coordinate how different modules interacted. I took charge of ensuring architectural coherence, making sure that the backend data flowed seamlessly into the UI without performance or structural bottlenecks. 
+
+Ultimately, I transitioned from “building the user experience and visual components” to orchestrating the integration process, to maintain a clean, unified architecture throughout the software’s development.
+
+### Strengths of my contribution
+
+* **User-Centric Integration:** Successfully connected complex backend logic with the visual design without sacrificing the simplicity and responsiveness of the desktop app.
+* **Effective Data Visualization:** Implemented robust Python-based graphs that brought the raw financial data to life, adding significant practical value for the user.
+* **Architectural Coherence:** Acted as a central reference point for module integration, ensuring that the team’s backend outputs matched the frontend’s structural requirements.
+* **Adaptability:** Quickly pivoted from a specialized UI/UX role to a broader technical coordination role when the project required stronger alignment between different layers of the codebase.
+
+### Weaknesses / Points to improve
+
+* **Coupling challenges early on:** In the early stages, the lines between UI logic and backend data retrieval were sometimes blurred. A stricter separation of concerns from day one would have saved refactoring time later.
+* **Testing of interactive components:** While the logical parts were thoroughly verified, establishing automated testing for the user interface and graphical elements proved challenging and could be more systematically addressed in future iterations.
+* **Delegation of integration tasks:** By taking on the majority of the UI-to-logic connection work, I occasionally became a bottleneck. Better distribution of these integration tasks across the team could have improved our overall velocity.
+
+### Role in the group
+
+I began the project as the primary Frontend and Data Visualization Developer, focusing entirely on the app's design, user interaction, and graphical components. However, because my work depended on every other module functioning correctly, I acted as the crucial link between the backend developers and the final user experience. My final job then was guiding architectural decisions to ensure that the entire team's work converged into a cohesive, stable, and user-friendly product.
